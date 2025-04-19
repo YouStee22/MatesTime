@@ -3,16 +3,19 @@ package com.example.matestime;
 
 import com.example.matestime.dao.UserDao;
 import com.example.matestime.user.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//JACKSON, JSON
+
 @RestController
 @RequestMapping("/api/users/")
+@CrossOrigin(origins = "*")
 public class UserController {
+    //FlatService -> schedule -> 80 li ijka
+    //Flyway -> pocytac (flatmates folder flyway)
+    //dodać wartswe serwisową, serwis rozwamia  z dao dla testów
 
     private final UserDao userDao;
 
@@ -20,10 +23,16 @@ public class UserController {
         this.userDao = userDao;
     }
 
-    @GetMapping("/{id}")
+    @PostMapping("/add")
+    public void addUser(@RequestBody User user) {
+        userDao.addUser(user.getName(), user.getEmail());
+    }
+
+    @GetMapping("/{id}")                                                //status code - 200, 404 itd...
     public User getUserById(@PathVariable int id) {
-        return userDao.getById(id)
+        return userDao.getById(id)                                        //Czy sytuacja spodziewana
                 .orElseThrow(() -> new RuntimeException("User not found"));
+//        return userDao.getById(id);
     }
 
     @GetMapping("/all")
@@ -31,8 +40,8 @@ public class UserController {
         return userDao.getAll();
     }
 
-    @GetMapping("/{id}")
-    public void delete(@PathVariable int id) {
-        userDao.getById(id);
-    }
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id) {//@RequestParam - wartosc po znaku zapytania
+        userDao.deleteById(id);                        //@PathVaraible - wartosc po slaszu
+    }                                               //@RequestBody - dodatkowe wartosci
 }
