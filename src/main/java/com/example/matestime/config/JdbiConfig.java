@@ -1,5 +1,6 @@
 package com.example.matestime.config;
 
+import com.example.matestime.dao.GroupDao;
 import com.example.matestime.dao.UserDao;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
@@ -21,5 +22,10 @@ public class JdbiConfig {
     @Bean
     public UserDao userDao(Jdbi jdbi) {             //Ta metoda tworzy bean dla UserDao.
         return jdbi.onDemand(UserDao.class);        //jdbi.onDemand(UserDao.class) zwraca instancję UserDao, którą JDBI tworzy dynamicznie w momencie wywołania
+    }
+
+    @Bean
+    public GroupDao groupDao(Jdbi jdbi) {             //Ta metoda tworzy bean dla UserDao.
+        return jdbi.onDemand(GroupDao.class);        //jdbi.onDemand(UserDao.class) zwraca instancję UserDao, którą JDBI tworzy dynamicznie w momencie wywołania
     }
 }

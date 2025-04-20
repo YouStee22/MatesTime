@@ -1,8 +1,6 @@
 package com.example.matestime.dao;
 
-
 import com.example.matestime.user.User;
-import org.hibernate.annotations.SQLDelete;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
