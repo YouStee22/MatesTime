@@ -22,11 +22,8 @@ public class UserController {                                           //Co z C
 
    private final UserService userService;
 
-    private final CommunityDao communityDao;
-
-    public UserController(UserService userService, CommunityDao communityDao) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.communityDao = communityDao;
     }
 
     @PostMapping("/add")
