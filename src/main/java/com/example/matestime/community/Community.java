@@ -1,17 +1,18 @@
-package com.example.matestime.group;
+package com.example.matestime.community;
+//niebieski pasek - zminy github
 
-public class Group {
+public class Community {
 
     private int id;
 
     private String name;
 
-    public Group(int id, String name) {
+    public Community(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Group() {
+    public Community() {
     }
 
     public int getId() {

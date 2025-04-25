@@ -1,7 +1,9 @@
 package com.example.matestime.config;
 
-import com.example.matestime.dao.GroupDao;
+import com.example.matestime.dao.CommunityDao;
+import com.example.matestime.dao.UserCommunitiesDao;
 import com.example.matestime.dao.UserDao;
+import com.example.matestime.userCommunities.UserCommunities;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +27,12 @@ public class JdbiConfig {
     }
 
     @Bean
-    public GroupDao groupDao(Jdbi jdbi) {             //Ta metoda tworzy bean dla UserDao.
-        return jdbi.onDemand(GroupDao.class);        //jdbi.onDemand(UserDao.class) zwraca instancję UserDao, którą JDBI tworzy dynamicznie w momencie wywołania
+    public CommunityDao communitiyDao(Jdbi jdbi) {             //Ta metoda tworzy bean dla UserDao.
+        return jdbi.onDemand(CommunityDao.class);        //jdbi.onDemand(UserDao.class) zwraca instancję UserDao, którą JDBI tworzy dynamicznie w momencie wywołania
+    }
+
+    @Bean
+    public UserCommunitiesDao userCommunitiesDao(Jdbi jdbi) {             //Ta metoda tworzy bean dla UserDao.
+        return jdbi.onDemand(UserCommunitiesDao.class);        //jdbi.onDemand(UserDao.class) zwraca instancję UserDao, którą JDBI tworzy dynamicznie w momencie wywołania
     }
 }
