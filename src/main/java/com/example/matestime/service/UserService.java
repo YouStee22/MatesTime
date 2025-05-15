@@ -1,7 +1,7 @@
 package com.example.matestime.service;
 
 import com.example.matestime.dao.UserDao;
-import com.example.matestime.user.User;
+import com.example.matestime.models.user.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

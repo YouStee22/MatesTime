@@ -1,4 +1,4 @@
-package com.example.matestime.community;
+package com.example.matestime.models.community;
 //niebieski pasek - zminy github
 
 public class Community {

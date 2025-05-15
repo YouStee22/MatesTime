@@ -2,7 +2,7 @@ package com.example.matestime;
 
 
 import com.example.matestime.dao.UserCommunitiesDao;
-import com.example.matestime.userCommunities.UserCommunities;
+import com.example.matestime.models.userCommunities.UserCommunity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +23,8 @@ public class UserCommunitiesController {                                        
     }
 
     @GetMapping("/all")
-    public List<UserCommunities> getAllUsers() {
+    public List<UserCommunity> getAllUsers() {
         System.out.println(userCommunitiesDao.getAll());
         return userCommunitiesDao.getAll();
     }
-
-
 }

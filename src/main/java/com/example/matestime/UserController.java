@@ -1,11 +1,8 @@
 package com.example.matestime;
 
 
-import com.example.matestime.community.Community;
-import com.example.matestime.dao.CommunityDao;
-import com.example.matestime.dao.UserDao;
 import com.example.matestime.service.UserService;
-import com.example.matestime.user.User;
+import com.example.matestime.models.user.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

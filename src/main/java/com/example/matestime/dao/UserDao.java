@@ -1,8 +1,9 @@
 package com.example.matestime.dao;
 
-import com.example.matestime.user.User;
+import com.example.matestime.models.user.User;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
+import org.jdbi.v3.sqlobject.customizer.BindList;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
@@ -23,4 +24,7 @@ public interface UserDao {
 
     @SqlUpdate("INSERT INTO users (name, email) VALUES (:name, :email)")
     void addUser(@Bind("name") String name, @Bind("email") String email);
+
+    @SqlQuery("SELECT * FROM users WHERE id IN (<ids>)")
+    List<User> getUsersByCommunityId(@BindList(value = "ids") final List<Integer> ids);
 }

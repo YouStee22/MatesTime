@@ -1,15 +1,15 @@
-package com.example.matestime.userCommunities;
+package com.example.matestime.models.userCommunities;
 
-public class UserCommunities {
+public class UserCommunity {
 
     private int userId;
 
     private int communityId;
 
-    public UserCommunities() {
+    public UserCommunity() {
     }
 
-    public UserCommunities(int userId, int communityId) {
+    public UserCommunity(int userId, int communityId) {
         this.userId = userId;
         this.communityId = communityId;
     }

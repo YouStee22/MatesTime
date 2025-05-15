@@ -1,6 +1,6 @@
 package com.example.matestime.dao;
 
-import com.example.matestime.community.Community;
+import com.example.matestime.models.community.Community;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
@@ -17,4 +17,7 @@ public interface CommunityDao {
 
     @SqlQuery("SELECT * FROM communities")
     List<Community> getAll();
+
+    @SqlQuery("SELECT * FROM communities WHERE id = :id")
+    Community getCommunityById(@Bind("id") int id);
 }

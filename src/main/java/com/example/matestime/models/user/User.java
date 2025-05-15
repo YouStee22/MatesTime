@@ -1,4 +1,4 @@
-package com.example.matestime.user;
+package com.example.matestime.models.user;
 
 public class User {
 
