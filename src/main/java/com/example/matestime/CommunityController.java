@@ -23,9 +23,9 @@ public class CommunityController {
         this.communityService = communityService;
     }
 
-    @PostMapping("/addCommunity")
+    @PostMapping("/add")
     public void addCommunity(@RequestBody Community community) {
-        communityDao.addCommunitiy(community.getId(), community.getName());
+        communityDao.addCommunitiy(community.getName());
     }
 
     @GetMapping("/all")
@@ -33,10 +33,18 @@ public class CommunityController {
         return communityDao.getAll();
     }
 
-    @GetMapping("/getUsers/{id}")
-    public CommunityDTO getCommunity(@PathVariable int id) {
-        CommunityDTO communityDTO  = communityService.getCommunityById(id);
-        System.out.println(communityDTO);
-        return communityDTO;
+    @GetMapping("/{id}")
+    public CommunityDTO getCommunityById(@PathVariable int id) {
+        System.out.println(communityService.getCommunityById(id).toString());
+        return communityService.getCommunityById(id);
     }
+
+    @GetMapping("/communities")
+    public Community getCommunityByName(@RequestParam String name) {
+        System.out.println(communityService.getCommunityByName(name).toString());
+        return communityService.getCommunityByName(name);
+    }
+
+
+
 }
