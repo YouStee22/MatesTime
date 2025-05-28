@@ -1,6 +1,7 @@
 package com.example.matestime.models.community;
 
 import com.example.matestime.models.user.User;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.List;
 
@@ -47,10 +48,10 @@ public class CommunityDTO {
 
     @Override
     public String toString() {
-        return "CommunityDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", users=" + users.toString() +
-                '}';
+        return new ToStringBuilder(this)
+                .append("id", id)
+                .append("name", name)
+                .append("users", users)
+                .toString();
     }
 }

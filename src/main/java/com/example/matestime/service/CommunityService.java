@@ -29,11 +29,13 @@ public class CommunityService {
         this.userDao = userDao;
     }
 
-    public CommunityDTO getCommunityById(int communityId) {
+    public Community getCommunityByName(String name) {
+        return communityDao.getCommunityByName(name);
+    }
+
+    public CommunityDTO getCommunityById(int communityId) {                         //walidacja czy id istnieje rowieniz
         Community community = communityDao.getCommunityById(communityId);
-        System.out.println(community);
         List<UserCommunity> userCommunities = userCommunitiesDao.getUserListById(communityId);   //stream na liste
-        System.out.println(userCommunities);
         List<Integer> listOfUsers = userCommunities.stream()
                 .map(UserCommunity::getUserId)
                 .collect(Collectors.toList());
@@ -42,7 +44,7 @@ public class CommunityService {
 
         CommunityDTO communityDTO = new CommunityDTO(communityId, community.getName(), userList);
 
-        return communityDTO;                //jak tutaj debugowac?
+        return communityDTO;                //jak tutaj debugowac?                      //jak brak id to zworcic pusta liste
     }
 
 

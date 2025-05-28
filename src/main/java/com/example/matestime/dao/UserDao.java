@@ -27,4 +27,6 @@ public interface UserDao {
 
     @SqlQuery("SELECT * FROM users WHERE id IN (<ids>)")
     List<User> getUsersByCommunityId(@BindList(value = "ids") final List<Integer> ids);
+
+    //dwie linijki
 }
