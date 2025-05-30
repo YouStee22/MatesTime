@@ -12,12 +12,15 @@ import java.util.List;
 @RegisterBeanMapper(Community.class)
 public interface CommunityDao {
 
-    @SqlUpdate("INSERT INTO communities (id, name) VALUES (:id, :name)")
-    void addCommunitiy(@Bind("id") int id, @Bind("name") String name);
+    @SqlUpdate("INSERT INTO communities (name) VALUES (:name)")
+    void addCommunitiy(@Bind("name") String name);
 
     @SqlQuery("SELECT * FROM communities")
     List<Community> getAll();
 
     @SqlQuery("SELECT * FROM communities WHERE id = :id")
     Community getCommunityById(@Bind("id") int id);
+
+    @SqlQuery("SELECT * FROM communities WHERE name = :name")
+    Community getCommunityByName(@Bind("name") String name);
 }

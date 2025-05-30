@@ -12,6 +12,8 @@ public class Community {
         this.name = name;
     }
 
+
+
     public Community() {
     }
 

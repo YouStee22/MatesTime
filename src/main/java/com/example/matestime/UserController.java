@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users/")                  //nowy kontroler
 @CrossOrigin(origins = "*")
-public class UserController {                                           //Co z CrossOrigin i dodawaniem?
+public class UserController {
     //FlatService -> schedule -> 80 li ijka
     //Flyway -> pocytac (flatmates folder flyway)
     //dodać wartswe serwisową, serwis rozwamia  z dao dla testów
