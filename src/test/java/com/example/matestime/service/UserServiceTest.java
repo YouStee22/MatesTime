@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,8 +35,6 @@ public class UserServiceTest {
         verify(userDao).addUser(user.getName(), user.getEmail());
     }
 
-    //shouldGetAllUsers
-
     @Test
     public void getUserByIdTest() {         //drugi test jezeli nie zwroci nic
         when(userDao.getById(2)).thenReturn(Optional.of(user));
@@ -47,8 +46,27 @@ public class UserServiceTest {
     }
 
     @Test
+    public void getIfNoUsers() {
+        when(userDao.getById(0)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.getUserById(0));
+
+        assertEquals("User not found", exception.getMessage());
+        verify(userDao).getById(0);
+    }
+
+    @Test
     public void getAllUsersTest() {
         List<User> expectedUsers = Arrays.asList(user);
+
+        when(userDao.getAll()).thenReturn(expectedUsers);
+
+        assertEquals(expectedUsers, userService.getAllUsers());
+    }
+
+    @Test
+    public void getEmptyUsersTest() {
+        List<User> expectedUsers = Collections.emptyList();
 
         when(userDao.getAll()).thenReturn(expectedUsers);
 

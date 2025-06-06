@@ -3,6 +3,7 @@ package com.example.matestime.dao;
 import com.example.matestime.models.community.Community;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
+import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
@@ -14,6 +15,10 @@ public interface CommunityDao {
 
     @SqlUpdate("INSERT INTO communities (name) VALUES (:name)")
     void addCommunitiy(@Bind("name") String name);
+
+    @SqlUpdate("INSERT INTO communities (name) VALUES (:name)")                 //dwie te same metody
+    @GetGeneratedKeys
+    int addCommunity(@Bind("name") String name);
 
     @SqlQuery("SELECT * FROM communities")
     List<Community> getAll();

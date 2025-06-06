@@ -7,10 +7,15 @@ import com.example.matestime.models.community.Community;
 import com.example.matestime.models.community.CommunityDTO;
 import com.example.matestime.models.user.User;
 import com.example.matestime.models.userCommunities.UserCommunity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Collections;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,16 +40,30 @@ public class CommunityService {
 
     public CommunityDTO getCommunityById(int communityId) {                         //walidacja czy id istnieje rowieniz
         Community community = communityDao.getCommunityById(communityId);
-        List<UserCommunity> userCommunities = userCommunitiesDao.getUserListById(communityId);   //stream na liste
+
+        if (community == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Community with ID " + communityId + " not found");
+        }
+
+        System.out.println(community.getName());
+        List<UserCommunity> userCommunities = Optional.ofNullable(userCommunitiesDao.getUserListById(communityId)).orElse(Collections.emptyList());
+
+
         List<Integer> listOfUsers = userCommunities.stream()
                 .map(UserCommunity::getUserId)
                 .collect(Collectors.toList());
 
-        List<User> userList = userDao.getUsersByCommunityId(listOfUsers);
+        System.out.println("List of users ids: " + listOfUsers);
+
+        List<User> userList = Optional.ofNullable(userDao.getUsersByCommunityId(listOfUsers))
+                .orElse(Collections.emptyList());
+
+        System.out.println("list of users: " + userList);
 
         CommunityDTO communityDTO = new CommunityDTO(communityId, community.getName(), userList);
+        System.out.println("Final obj " + communityDTO);
 
-        return communityDTO;                //jak tutaj debugowac?                      //jak brak id to zworcic pusta liste
+        return communityDTO;                ///dlaczego po szukaniu id community która nie zawiera listy uzytkownikow nie zwraca obiektu?
     }
 
 
