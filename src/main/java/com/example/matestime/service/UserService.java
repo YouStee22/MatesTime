@@ -1,5 +1,6 @@
 package com.example.matestime.service;
 
+import com.example.matestime.dao.UserCommunitiesDao;
 import com.example.matestime.dao.UserDao;
 import com.example.matestime.models.user.User;
 import org.springframework.stereotype.Service;
@@ -11,8 +12,11 @@ public class UserService {
 
     private final UserDao userDao;
 
-    public UserService(UserDao userDao) {
+    private final UserCommunitiesDao userCommunitiesDao;
+
+    public UserService(UserDao userDao, UserCommunitiesDao userCommunitiesDao) {
         this.userDao = userDao;
+        this.userCommunitiesDao = userCommunitiesDao;
     }
 
     public void addUser(User user) {
@@ -30,5 +34,9 @@ public class UserService {
 
     public void delete(int id) {
         userDao.deleteById(id);
+    }
+
+    public void deleteRelatedId(int id) {
+        userCommunitiesDao.deleteRelatedIdToUser(id);
     }
 }

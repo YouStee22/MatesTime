@@ -7,12 +7,11 @@ import com.example.matestime.dao.CommunityDao;
 import com.example.matestime.models.community.CommunityDTO;
 import com.example.matestime.models.community.CommunityDefinition;
 import com.example.matestime.service.CommunityService;
-import org.springframework.http.ResponseEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/community/")
@@ -24,6 +23,8 @@ public class CommunityController {
     private final UserCommunitiesDao userCommunitiesDao;
 
     private final CommunityService communityService;
+
+    private static final Logger logger = LogManager.getLogger(CommunityController.class);
 
     public CommunityController(CommunityDao communityDao, UserCommunitiesDao userCommunitiesDao, CommunityService communityService) {
         this.communityDao = communityDao;
@@ -44,10 +45,10 @@ public class CommunityController {
         int idOfNewCommunity = communityDao.addCommunity(communityDefinition.getName());
 
         communityDefinition.getUsers().forEach(user -> {
-            userCommunitiesDao.addCommunitiesIds(user, idOfNewCommunity);
+            userCommunitiesDao.addCommunityIds(user, idOfNewCommunity);
         });
 
-        //batch insert
+        logger.info("Received community definition: {}", communityDefinition);
     }
 
     @GetMapping("/all")

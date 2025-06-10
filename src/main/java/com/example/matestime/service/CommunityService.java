@@ -39,12 +39,7 @@ public class CommunityService {
     }
 
     public CommunityDTO getCommunityById(int communityId) {                         //walidacja czy id istnieje rowieniz
-        Community community = communityDao.getCommunityById(communityId);
-
-        if (community == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Community with ID " + communityId + " not found");
-        }
-
+        Community community = Optional.ofNullable(communityDao.getCommunityById(communityId)).orElseThrow();
         System.out.println(community.getName());
         List<UserCommunity> userCommunities = Optional.ofNullable(userCommunitiesDao.getUserListById(communityId)).orElse(Collections.emptyList());
 
