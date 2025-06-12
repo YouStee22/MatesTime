@@ -17,7 +17,7 @@ public interface UserDao {
     Optional<User> getById(@Bind("id") int id);
 
     @SqlUpdate("DELETE FROM users WHERE id = :id")
-    void deleteById(@Bind("id") int id);
+    int deleteById(@Bind("id") int id);
 
     @SqlQuery("SELECT * FROM users")
     List<User> getAll();
@@ -28,5 +28,4 @@ public interface UserDao {
     @SqlQuery("SELECT * FROM users WHERE id IN (<ids>)")
     List<User> getUsersByCommunityId(@BindList(value = "ids") final List<Integer> ids);
 
-    //dwie linijki
 }

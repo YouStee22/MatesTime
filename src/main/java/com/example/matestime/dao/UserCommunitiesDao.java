@@ -17,9 +17,12 @@ public interface UserCommunitiesDao {
     @SqlQuery("SELECT * FROM user_communities")
     List<UserCommunity> getAll();
 
+    @SqlUpdate("DELETE FROM user_communities WHERE user_id = :id")
+    void deleteUserFromCommunity(@Bind("id") int id);
+
     @SqlQuery("SELECT * FROM user_communities WHERE community_id = :communityId")
     List<UserCommunity> getUserListById(@Bind("communityId") int communityId);
 
     @SqlUpdate("INSERT INTO user_communities (user_id, community_id) VALUES (:user_id, :community_id)")
-    void addCommunitiesIds(@Bind("user_id") int userId, @Bind("community_id") int communityId);
+    void addUserToCommunity(@Bind("user_id") int userId, @Bind("community_id") int communityId);
 }

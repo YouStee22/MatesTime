@@ -28,7 +28,7 @@ public class UserController {
         userService.addUser(user);
     }
 
-    @GetMapping("/{id}")                                                //status code - 200, 404 itd...
+    @GetMapping("/{id}")
     public User getUserById(@PathVariable int id) {
         return userService.getUserById(id);
     }
@@ -39,7 +39,11 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {//@RequestParam - wartosc po znaku zapytania
-        userService.delete(id);                     //@PathVaraible - wartosc po slaszu
-    }                                                  //@RequestBody - dodatkowe wartosci
+    public void delete(@PathVariable int id) {
+        userService.delete(id);
+    }
 }
+//MySql nie pozwoli usunąć gdy sa inne powiązania w innych tablicach
+//@RequestParam - wartosc po znaku zapytania
+//@PathVaraible - wartosc po slaszu
+//@RequestBody - dodatkowe wartosci
