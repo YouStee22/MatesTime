@@ -33,10 +33,7 @@ public class UserService {
     }
 
     public void delete(int id) {
+        userCommunitiesDao.deleteUserFromCommunity(id);
         userDao.deleteById(id);
-    }
-
-    public void deleteRelatedId(int id) {
-        userCommunitiesDao.deleteRelatedIdToUser(id);
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,10 +38,9 @@ public class CommunityService {
     }
 
     public CommunityDTO getCommunityById(int communityId) {                         //walidacja czy id istnieje rowieniz
-        Community community = Optional.ofNullable(communityDao.getCommunityById(communityId)).orElseThrow();
+        Community community = Optional.ofNullable(communityDao.getCommunityById(communityId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         System.out.println(community.getName());
         List<UserCommunity> userCommunities = Optional.ofNullable(userCommunitiesDao.getUserListById(communityId)).orElse(Collections.emptyList());
-
 
         List<Integer> listOfUsers = userCommunities.stream()
                 .map(UserCommunity::getUserId)
@@ -58,8 +56,10 @@ public class CommunityService {
         CommunityDTO communityDTO = new CommunityDTO(communityId, community.getName(), userList);
         System.out.println("Final obj " + communityDTO);
 
-        return communityDTO;                ///dlaczego po szukaniu id community która nie zawiera listy uzytkownikow nie zwraca obiektu?
+        return communityDTO;
     }
 
-
+    public UserCommunitiesDao getUserCommunitiesDao() {
+        return userCommunitiesDao;
+    }
 }

@@ -28,7 +28,7 @@ public class UserController {
         userService.addUser(user);
     }
 
-    @GetMapping("/{id}")                                                //status code - 200, 404 itd...
+    @GetMapping("/{id}")
     public User getUserById(@PathVariable int id) {
         return userService.getUserById(id);
     }
@@ -40,7 +40,6 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id) {
-        userService.deleteRelatedId(id);
         userService.delete(id);
     }
 }

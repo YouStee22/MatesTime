@@ -14,9 +14,6 @@ import java.util.List;
 public interface CommunityDao {
 
     @SqlUpdate("INSERT INTO communities (name) VALUES (:name)")
-    void addCommunitiy(@Bind("name") String name);
-
-    @SqlUpdate("INSERT INTO communities (name) VALUES (:name)")                 //dwie te same metody
     @GetGeneratedKeys
     int addCommunity(@Bind("name") String name);
 

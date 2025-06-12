@@ -1,7 +1,6 @@
 package com.example.matestime;
 
 
-import com.example.matestime.dao.UserCommunitiesDao;
 import com.example.matestime.models.community.Community;
 import com.example.matestime.dao.CommunityDao;
 import com.example.matestime.models.community.CommunityDTO;
@@ -20,22 +19,18 @@ public class CommunityController {
 
     private final CommunityDao communityDao;
 
-    private final UserCommunitiesDao userCommunitiesDao;
-
     private final CommunityService communityService;
 
-    private static final Logger logger = LogManager.getLogger(CommunityController.class);
+    private final Logger logger = LogManager.getLogger(CommunityController.class);
 
-    public CommunityController(CommunityDao communityDao, UserCommunitiesDao userCommunitiesDao, CommunityService communityService) {
+    public CommunityController(CommunityDao communityDao, CommunityService communityService) {
         this.communityDao = communityDao;
-        this.userCommunitiesDao = userCommunitiesDao;
         this.communityService = communityService;
     }
 
-    //może przyjść obiekt community z samą nazwą bez osób i z listą osób
     @PostMapping("/add")
     public void addCommunity(@RequestBody Community community) {
-        communityDao.addCommunitiy(community.getName());
+        communityDao.addCommunity(community.getName());
     }
 
     @PostMapping("/addDto")
@@ -45,7 +40,7 @@ public class CommunityController {
         int idOfNewCommunity = communityDao.addCommunity(communityDefinition.getName());
 
         communityDefinition.getUsers().forEach(user -> {
-            userCommunitiesDao.addCommunityIds(user, idOfNewCommunity);
+            communityService.getUserCommunitiesDao().addUserToCommunity(user, idOfNewCommunity);
         });
 
         logger.info("Received community definition: {}", communityDefinition);

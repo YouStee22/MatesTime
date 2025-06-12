@@ -14,5 +14,7 @@ public class ExceptionHandler {
         return "Not Found";
     }
 
+    //missing dat exception dodatkowo
+
 
 }
