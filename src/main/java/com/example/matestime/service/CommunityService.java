@@ -37,24 +37,22 @@ public class CommunityService {
         return communityDao.getCommunityByName(name);
     }
 
-    public CommunityDTO getCommunityById(int communityId) {                         //walidacja czy id istnieje rowieniz
-        Community community = Optional.ofNullable(communityDao.getCommunityById(communityId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        System.out.println(community.getName());
-        List<UserCommunity> userCommunities = Optional.ofNullable(userCommunitiesDao.getUserListById(communityId)).orElse(Collections.emptyList());
+    public CommunityDTO getCommunityById(int communityId) {
+
+        Community community = Optional.ofNullable(communityDao.getCommunityById(communityId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Community not found with ID " + communityId));
+
+        List<UserCommunity> userCommunities = userCommunitiesDao.getUserListById(communityId);
 
         List<Integer> listOfUsers = userCommunities.stream()
                 .map(UserCommunity::getUserId)
                 .collect(Collectors.toList());
 
-        System.out.println("List of users ids: " + listOfUsers);
-
-        List<User> userList = Optional.ofNullable(userDao.getUsersByCommunityId(listOfUsers))
+        List<User> userList = listOfUsers.isEmpty() ? Collections.emptyList()
+                : Optional.ofNullable(userDao.getUsersByCommunityId(listOfUsers))
                 .orElse(Collections.emptyList());
 
-        System.out.println("list of users: " + userList);
-
         CommunityDTO communityDTO = new CommunityDTO(communityId, community.getName(), userList);
-        System.out.println("Final obj " + communityDTO);
 
         return communityDTO;
     }

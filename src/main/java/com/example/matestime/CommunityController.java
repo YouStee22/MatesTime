@@ -63,6 +63,4 @@ public class CommunityController {
         return communityService.getCommunityByName(name);
     }
 
-
-
 }
