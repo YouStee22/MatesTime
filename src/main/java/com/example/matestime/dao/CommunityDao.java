@@ -25,4 +25,7 @@ public interface CommunityDao {
 
     @SqlQuery("SELECT * FROM communities WHERE name = :name")
     Community getCommunityByName(@Bind("name") String name);
+
+    @SqlUpdate("DELETE FROM communities WHERE id = :id")
+    void deleteCommunityById(@Bind("id") int id);
 }

@@ -8,6 +8,7 @@ import com.example.matestime.models.community.CommunityDefinition;
 import com.example.matestime.service.CommunityService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jdbi.v3.sqlobject.transaction.Transaction;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -61,6 +62,13 @@ public class CommunityController {
     public Community getCommunityByName(@RequestParam String name) {
         System.out.println(communityService.getCommunityByName(name).toString());
         return communityService.getCommunityByName(name);
+    }
+
+    @DeleteMapping("/{id}")
+    @Transaction
+    public void deleteCommunityById(@PathVariable int id) {
+        communityService.deleteCommunityFromCommunityRelation(id);
+        communityDao.deleteCommunityById(id);
     }
 
 }
