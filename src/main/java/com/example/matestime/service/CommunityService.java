@@ -38,7 +38,7 @@ public class CommunityService {
         return communityDao.getCommunityByName(name);
     }
 
-    public void deleteCommunityFromCommunityRelation(@Bind("community_id") int community_id) {
+    public void deleteCommunityFromCommunityRelation(int community_id) {
         userCommunitiesDao.deleteCommunityFromCommunityRelation(community_id);
     }
 
@@ -64,5 +64,9 @@ public class CommunityService {
 
     public UserCommunitiesDao getUserCommunitiesDao() {
         return userCommunitiesDao;
+    }
+
+    public void deleteCommunity(int id) {
+        communityDao.deleteCommunityById(id);
     }
 }

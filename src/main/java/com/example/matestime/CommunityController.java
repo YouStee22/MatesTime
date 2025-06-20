@@ -68,7 +68,7 @@ public class CommunityController {
     @Transaction
     public void deleteCommunityById(@PathVariable int id) {
         communityService.deleteCommunityFromCommunityRelation(id);
-        communityDao.deleteCommunityById(id);
+        communityService.deleteCommunity(id);
     }
 
 }
