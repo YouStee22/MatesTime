@@ -7,6 +7,7 @@ import com.example.matestime.models.community.Community;
 import com.example.matestime.models.community.CommunityDTO;
 import com.example.matestime.models.user.User;
 import com.example.matestime.models.userCommunities.UserCommunity;
+import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -37,6 +38,10 @@ public class CommunityService {
         return communityDao.getCommunityByName(name);
     }
 
+    public void deleteCommunityFromCommunityRelation(int community_id) {
+        userCommunitiesDao.deleteCommunityFromCommunityRelation(community_id);
+    }
+
     public CommunityDTO getCommunityById(int communityId) {
 
         Community community = Optional.ofNullable(communityDao.getCommunityById(communityId))
@@ -59,5 +64,9 @@ public class CommunityService {
 
     public UserCommunitiesDao getUserCommunitiesDao() {
         return userCommunitiesDao;
+    }
+
+    public void deleteCommunity(int id) {
+        communityDao.deleteCommunityById(id);
     }
 }

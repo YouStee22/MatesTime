@@ -20,6 +20,9 @@ public interface UserCommunitiesDao {
     @SqlUpdate("DELETE FROM user_communities WHERE user_id = :id")
     void deleteUserFromCommunity(@Bind("id") int id);
 
+    @SqlUpdate("DELETE FROM user_communities WHERE community_id = :community_id")
+    void deleteCommunityFromCommunityRelation(@Bind("community_id") int community_id);
+
     @SqlQuery("SELECT * FROM user_communities WHERE community_id = :communityId")
     List<UserCommunity> getUserListById(@Bind("communityId") int communityId);
 
