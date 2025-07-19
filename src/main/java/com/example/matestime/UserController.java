@@ -10,17 +10,24 @@ import java.util.List;
 //JACKSON, JSON
 
 @RestController
-@RequestMapping("/api/users/")                  //nowy kontroler
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/users/")
+//@CrossOrigin(origins = "*")
 public class UserController {
-    //FlatService -> schedule -> 80 li ijka
-    //Flyway -> pocytac (flatmates folder flyway)
-    //dodać wartswe serwisową, serwis rozwamia  z dao dla testów
 
    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping()
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @PutMapping("/update")
+    public void updateUser(@RequestBody User user) {
+        userService.updateUser(user);
     }
 
     @PostMapping("/add")
@@ -31,11 +38,6 @@ public class UserController {
     @GetMapping("/{id}")
     public User getUserById(@PathVariable int id) {
         return userService.getUserById(id);
-    }
-
-    @GetMapping("/all")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
     }
 
     @DeleteMapping("/{id}")

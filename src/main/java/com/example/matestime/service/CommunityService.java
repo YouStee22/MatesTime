@@ -36,7 +36,6 @@ public class CommunityService {                         //Zawsze musi być konwe
     private final Logger logger = LogManager.getLogger(CommunityController.class);
 
     public CommunityService(final UserCommunitiesDao userCommunitiesDao, final CommunityDao communityDao, final UserDao userDao) {
-        //zapobiega modyfickajci obektow w konsturktoze
         this.userCommunitiesDao = userCommunitiesDao;
         this.communityDao = communityDao;
         this.userDao = userDao;
