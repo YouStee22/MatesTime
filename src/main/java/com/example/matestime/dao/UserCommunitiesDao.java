@@ -28,4 +28,14 @@ public interface UserCommunitiesDao {
 
     @SqlUpdate("INSERT INTO user_communities (user_id, community_id) VALUES (:user_id, :community_id)")
     void addUserToCommunity(@Bind("user_id") int userId, @Bind("community_id") int communityId);
+
+    @SqlQuery("SELECT community_id FROM user_communities WHERE user_id = :userId")       //By z mapą
+    List<Integer> getCommunityIdsForUserId(@Bind("userId") int userId);
+
+    @SqlUpdate("""
+    INSERT INTO user_communities (user_id, community_id)
+    VALUES (:user_id, :community_id)
+    ON DUPLICATE KEY UPDATE community_id = VALUES(community_id)
+    """)
+    void upsertUserCommunity(@Bind("user_id") int userId, @Bind("community_id") int communityId);
 }
