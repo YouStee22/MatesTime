@@ -17,6 +17,9 @@ public interface CommunityDao {
     @GetGeneratedKeys
     int addCommunity(@Bind("name") String name);
 
+    @SqlQuery("SELECT EXISTS(SELECT 1 FROM communities WHERE name = :name)")
+    boolean existsByName(@Bind("name") String name);
+
     @SqlQuery("SELECT * FROM communities")
     List<Community> getAll();
 

@@ -42,6 +42,10 @@ public class CommunityService {                         //Zawsze musi być konwe
     }
 
     public void addCommunity(Community community) {
+        if (communityDao.existsByName(community.getName())) {
+            throw new IllegalArgumentException("Community already exists");
+        }
+
         communityDao.addCommunity(community.getName());
     }
 

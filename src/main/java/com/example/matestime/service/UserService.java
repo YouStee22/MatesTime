@@ -5,6 +5,7 @@ import com.example.matestime.dao.UserDao;
 import com.example.matestime.models.DuplicateUserException;
 import com.example.matestime.models.InvalidEmailException;
 import com.example.matestime.models.MissingDataException;
+import com.example.matestime.models.UserDoesNotExists;
 import com.example.matestime.models.user.User;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,11 @@ public class UserService {
     }
 
     public void updateUser(User user) {
-        //sprawdzac czy user istnieje
-        userDao.updateUser(user);
+        if (!userDao.userExistsById(user.getId())) {
+            throw new UserDoesNotExists("User not found with ID: " + user.getId());
+        } else {
+            userDao.updateUser(user);
+        }
     }
 
     public void addUser(User user) {                        //***

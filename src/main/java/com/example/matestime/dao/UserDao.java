@@ -29,9 +29,12 @@ public interface UserDao {
     @SqlQuery("SELECT * FROM users WHERE id IN (<ids>)")
     List<User> getUsersByCommunityId(@BindList(value = "ids") final List<Integer> ids);
 
-    @SqlQuery("SELECT COUNT(*) > 0 FROM users WHERE email = :email")
-    boolean userExistsByEmail(@Bind("email") String email);
-
     @SqlUpdate("UPDATE users SET name = :name, email = :email WHERE id = :id")
     int updateUser(@BindBean User user);
+
+    @SqlQuery("SELECT COUNT(*) > 0 FROM users WHERE id = :id")
+    boolean userExistsById(@Bind("id") int id);
+
+    @SqlQuery("SELECT COUNT(*) > 0 FROM users WHERE email = :email")
+    boolean userExistsByEmail(@Bind("email") String email);
 }
