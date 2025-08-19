@@ -17,6 +17,9 @@ public interface UserCommunitiesDao {
     @SqlQuery("SELECT * FROM user_communities")
     List<UserCommunity> getAll();
 
+    @SqlQuery("SELECT COUNT(*) > 0 FROM user_communities WHERE user_id =:userId")
+    boolean userExistsInCommunity(@Bind("userId") Long userId);
+
     @SqlUpdate("DELETE FROM user_communities WHERE user_id = :id")
     void deleteUserFromCommunity(@Bind("id") int id);
 
@@ -29,8 +32,8 @@ public interface UserCommunitiesDao {
     @SqlUpdate("INSERT INTO user_communities (user_id, community_id) VALUES (:user_id, :community_id)")
     void addUserToCommunity(@Bind("user_id") int userId, @Bind("community_id") int communityId);
 
-//    @SqlUpdate("UPDATE user_communities SET community_id = :community_id WHERE user_id = :user_id")
-//    void updateCommunityForUser(@Bind("user_id") int userId, @Bind("community_id") int communityId);
+    @SqlQuery("SELECT community_id FROM user_communities WHERE user_id = :userId")       //By z mapą
+    List<Integer> getCommunityIdsForUserId(@Bind("userId") int userId);
 
     @SqlUpdate("""
     INSERT INTO user_communities (user_id, community_id)

@@ -2,8 +2,10 @@ package com.example.matestime.service;
 
 import com.example.matestime.dao.UserCommunitiesDao;
 import com.example.matestime.dao.UserDao;
+import com.example.matestime.models.DuplicateUserException;
 import com.example.matestime.models.InvalidEmailException;
 import com.example.matestime.models.MissingDataException;
+import com.example.matestime.models.MissingUserException;
 import com.example.matestime.models.user.User;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +23,24 @@ public class UserService {
         this.userCommunitiesDao = userCommunitiesDao;
     }
 
-    public void addUser(User user) {                        //***
+    public void updateUser(User user) {
+        if (!userDao.userExistsById(user.getId())) {
+            throw new MissingUserException("User not found with ID: " + user.getId());
+        } else {
+            userDao.updateUser(user);
+        }
+    }
+
+
+    public void addUser(User user) {
         if (user.getEmail().equals("123@wp.pl")) {
             throw new InvalidEmailException();
         }
-        userDao.addUser(user.getName(), user.getEmail());
+        if (userDao.userExistsByEmail(user.getEmail())) {
+            throw new DuplicateUserException();
+        } else {
+            userDao.addUser(user.getName(), user.getEmail());
+        }
     }
 
     public User getUserById(int id) {
@@ -38,7 +53,11 @@ public class UserService {
     }
 
     public void delete(int id) {
-        userCommunitiesDao.deleteUserFromCommunity(id);
-        userDao.deleteById(id);
+        if (!userDao.userExistsById(id)) {
+            throw new MissingUserException("User not found with ID: " + id);
+        } else {
+            userCommunitiesDao.deleteUserFromCommunity(id);
+            userDao.deleteById(id);
+        }
     }
 }

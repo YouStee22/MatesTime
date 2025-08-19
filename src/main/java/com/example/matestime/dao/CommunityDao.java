@@ -1,6 +1,7 @@
 package com.example.matestime.dao;
 
 import com.example.matestime.models.community.Community;
+import com.example.matestime.models.community.CommunityDefinition;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys;
@@ -17,6 +18,12 @@ public interface CommunityDao {
     @GetGeneratedKeys
     int addCommunity(@Bind("name") String name);
 
+    @SqlQuery("SELECT EXISTS(SELECT 1 FROM communities WHERE name = :name)")
+    boolean existsByName(@Bind("name") String name);
+
+    @SqlQuery("SELECT EXISTS(SELECT 1 FROM communities WHERE id = :id)")
+    boolean existsById(@Bind("id") int id);
+
     @SqlQuery("SELECT * FROM communities")
     List<Community> getAll();
 
@@ -29,6 +36,6 @@ public interface CommunityDao {
     @SqlUpdate("DELETE FROM communities WHERE id = :id")
     void deleteCommunityById(@Bind("id") int id);
 
-    @SqlUpdate("UPDATE communities SET name = :name WHERE id = :id")
-    void updateCommunityName(@Bind("id") int id, @Bind("name") String name);
+    @SqlUpdate("UPDATE communities SET name = :name, description = :description WHERE id = :id")
+    void updateCommunity(@Bind CommunityDefinition communityDefinition);
 }

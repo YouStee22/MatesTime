@@ -4,6 +4,8 @@ import com.example.matestime.CommunityController;
 import com.example.matestime.dao.CommunityDao;
 import com.example.matestime.dao.UserCommunitiesDao;
 import com.example.matestime.dao.UserDao;
+import com.example.matestime.models.CommunityAlreadyExistsException;
+import com.example.matestime.models.MissingCommunityException;
 import com.example.matestime.models.MissingDataException;
 import com.example.matestime.models.community.Community;
 import com.example.matestime.models.community.CommunityDTO;
@@ -12,11 +14,8 @@ import com.example.matestime.models.user.User;
 import com.example.matestime.models.userCommunities.UserCommunity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jdbi.v3.sqlobject.customizer.Bind;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 
@@ -24,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
+@Service                                                //tak aby przy przekazywaniu obiektu nke zmienac warstwy serwisowej
 public class CommunityService {                         //Zawsze musi być konwencja controller -> service -> ( repository) -> dao?
 
     private final UserCommunitiesDao userCommunitiesDao;        // (final) sa mnijesze szanse ze obiekt zosatnie zmodyfikowany
@@ -36,13 +35,16 @@ public class CommunityService {                         //Zawsze musi być konwe
     private final Logger logger = LogManager.getLogger(CommunityController.class);
 
     public CommunityService(final UserCommunitiesDao userCommunitiesDao, final CommunityDao communityDao, final UserDao userDao) {
-        //zapobiega modyfickajci obektow w konsturktoze
         this.userCommunitiesDao = userCommunitiesDao;
         this.communityDao = communityDao;
         this.userDao = userDao;
     }
 
     public void addCommunity(Community community) {
+        if (communityDao.existsByName(community.getName())) {
+            throw new IllegalArgumentException("Community already exists");
+        }
+
         communityDao.addCommunity(community.getName());
     }
 
@@ -51,38 +53,40 @@ public class CommunityService {                         //Zawsze musi być konwe
     }
 
     public void addCommunityDefinition(@RequestBody CommunityDefinition communityDefinition) {
-        System.out.println(communityDefinition);                                //+ sprawdzenia uzytkowika lub powiazanie jesli istneije
-        int idOfNewCommunity = communityDao.addCommunity(communityDefinition.getName());
+        if (communityDao.existsByName(communityDefinition.getName())) {
+            throw new CommunityAlreadyExistsException("Community already exists");
+        } else {
+            int idOfNewCommunity = communityDao.addCommunity(communityDefinition.getName());
 
-        communityDefinition.getUsers().forEach(user -> {
-            userCommunitiesDao.addUserToCommunity(user, idOfNewCommunity);
-        });
+            communityDefinition.getUsers().forEach(user -> {
+                userCommunitiesDao.addUserToCommunity(user, idOfNewCommunity);
+            });
+        }
 
         logger.info("Received community definition: {}", communityDefinition);
     }
 
     public void updateCommunity(CommunityDefinition communityDefinition) {
-        CommunityDefinition current = communityDefinition;
-        System.out.println("New  " + current);
-        communityDao.updateCommunityName(current.getId(), current.getName());
+        if (!communityDao.existsByName(communityDefinition.getName())) {
+            throw new MissingCommunityException("Community does not exists");
+        } else {
+            communityDao.updateCommunity(communityDefinition);
 
-        communityDefinition.getUsers().forEach(user -> {
-            userCommunitiesDao.upsertUserCommunity(user, current.getId());
-        });
-    }
 
-    public void updateCommunityName(int id, String name) {
-        communityDao.updateCommunityName(id, name);
+            communityDefinition.getUsers().forEach(user -> {
+                userCommunitiesDao.upsertUserCommunity(user, communityDefinition.getId());      //upset
+            });
+        }
     }
 
     public Community getCommunityByName(String name) {
-        return communityDao.getCommunityByName(name);
+        if (communityDao.existsByName(name)) {
+            return communityDao.getCommunityByName(name);
+        }
+        throw new MissingCommunityException("Community does not exists");
     }
 
     public CommunityDTO getCommunityById(int communityId) {
-
-//        Community community = Optional.ofNullable(communityDao.getCommunityById(communityId))
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Community not found with ID " + communityId));
 
         Community community = Optional.ofNullable(communityDao.getCommunityById(communityId))
                 .orElseThrow(() -> new MissingDataException("Community not found with ID: " + communityId));
@@ -107,7 +111,11 @@ public class CommunityService {                         //Zawsze musi być konwe
     }
 
     public void deleteCommunity(int id) {
-        userCommunitiesDao.deleteCommunityFromCommunityRelation(id);
-        communityDao.deleteCommunityById(id);
+        if (communityDao.existsById(id)) {
+            userCommunitiesDao.deleteCommunityFromCommunityRelation(id);
+            communityDao.deleteCommunityById(id);
+        } else {
+            throw new MissingCommunityException("Community does not exists");
+        }
     }
 }

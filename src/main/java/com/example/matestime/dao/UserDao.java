@@ -3,6 +3,7 @@ package com.example.matestime.dao;
 import com.example.matestime.models.user.User;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
+import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.customizer.BindList;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
@@ -28,4 +29,12 @@ public interface UserDao {
     @SqlQuery("SELECT * FROM users WHERE id IN (<ids>)")
     List<User> getUsersByCommunityId(@BindList(value = "ids") final List<Integer> ids);
 
+    @SqlUpdate("UPDATE users SET name = :name, email = :email WHERE id = :id")
+    int updateUser(@BindBean User user);
+
+    @SqlQuery("SELECT EXISTS(SELECT 1 FROM users WHERE id = :id")
+    boolean userExistsById(@Bind("id") int id);
+
+    @SqlQuery("SELECT EXISTS(SELECT 1 FROM users WHERE email = :email)")
+    boolean userExistsByEmail(@Bind("email") String email);
 }
