@@ -32,9 +32,9 @@ public interface UserDao {
     @SqlUpdate("UPDATE users SET name = :name, email = :email WHERE id = :id")
     int updateUser(@BindBean User user);
 
-    @SqlQuery("SELECT COUNT(*) > 0 FROM users WHERE id = :id")
+    @SqlQuery("SELECT EXISTS(SELECT 1 FROM users WHERE id = :id")
     boolean userExistsById(@Bind("id") int id);
 
-    @SqlQuery("SELECT COUNT(*) > 0 FROM users WHERE email = :email")
+    @SqlQuery("SELECT EXISTS(SELECT 1 FROM users WHERE email = :email)")
     boolean userExistsByEmail(@Bind("email") String email);
 }

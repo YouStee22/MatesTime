@@ -3,6 +3,7 @@ package com.example.matestime.service;
 import com.example.matestime.dao.CommunityDao;
 import com.example.matestime.dao.UserCommunitiesDao;
 import com.example.matestime.dao.UserDao;
+import com.example.matestime.models.MissingCommunityException;
 import com.example.matestime.models.community.Community;
 import com.example.matestime.models.community.CommunityDTO;
 import com.example.matestime.models.community.CommunityDefinition;
@@ -14,12 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.List;                                                      //control + option + o  - usuwanie zbednytch koemtarzy
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -39,7 +39,7 @@ class CommunityServiceTest {
 
     private Community community = new Community(1, "Piłka nożna");
 
-    private CommunityDefinition definition = new CommunityDefinition(1, "Chess Club", List.of(1, 2));
+    private CommunityDefinition definition = new CommunityDefinition(1, "Chess Club", List.of(1, 2), "Description");
 
 
     @Test
@@ -72,12 +72,27 @@ class CommunityServiceTest {
     }
 
     @Test
-    public void testUpdateCommunity() {
+    public void testUpdateCommunity() {                                                 //dwa testy jak istneije i nie istanieje
+        //given
+        when(communityDao.existsByName(definition.getName())).thenReturn(true);
+
+        //when
         communityService.updateCommunity(definition);
 
-        verify(communityDao).updateCommunityName(definition.getId(), definition.getName());
+        //then
+        verify(communityDao).updateCommunity(definition);
         verify(userCommunitiesDao).upsertUserCommunity(1, definition.getId());
         verify(userCommunitiesDao).upsertUserCommunity(2, definition.getId());
+    }
+
+    @Test
+    public void testUpdateCommunityThatDoesNotExist() {
+        CommunityDefinition communityDefinition = new CommunityDefinition(1, "NonExistingCommunity", List.of(1, 2), "Description");
+
+        when(communityDao.existsByName("NonExistingCommunity")).thenReturn(false);
+
+        assertThrows(MissingCommunityException.class,
+                () -> communityService.updateCommunity(communityDefinition));
     }
 
     @Test
@@ -110,9 +125,12 @@ class CommunityServiceTest {
     }
 
     @Test
-    void testDeleteCommunity() {
+    void testDeleteCommunity() {                    //drugi test jezeli community o zadanym id nie sitneije
+        //given
         int communityId = 42;
+        when(communityDao.existsById(communityId)).thenReturn(Boolean.TRUE);
 
+        //when
         communityService.deleteCommunity(communityId);
 
         verify(userCommunitiesDao).deleteCommunityFromCommunityRelation(communityId);

@@ -17,6 +17,9 @@ public interface UserCommunitiesDao {
     @SqlQuery("SELECT * FROM user_communities")
     List<UserCommunity> getAll();
 
+    @SqlQuery("SELECT COUNT(*) > 0 FROM user_communities WHERE user_id =:userId")
+    boolean userExistsInCommunity(@Bind("userId") Long userId);
+
     @SqlUpdate("DELETE FROM user_communities WHERE user_id = :id")
     void deleteUserFromCommunity(@Bind("id") int id);
 

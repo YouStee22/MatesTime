@@ -13,10 +13,13 @@ public class CommunityDefinition {          //kalsa modelowa
 
     private final List<Integer> users;
 
-    public CommunityDefinition(int id, String name, List<Integer> users) {
+    private final String description;
+
+    public CommunityDefinition(int id, String name, List<Integer> users, String description) {
         this.id = id;
         this.name = name;
         this.users = users;
+        this.description = description;
     }
 
     public String getName() {
